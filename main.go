@@ -27,6 +27,9 @@ func main() {
 
 	go fn.Broadcaster(join, leave, message, &history, &historyMu)
 
+	existingNames := make(map[string]bool)
+	var namesMu sync.Mutex
+
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
@@ -34,6 +37,6 @@ func main() {
 			fmt.Println("accept error:", err)
 			continue
 		}
-		go fn.HandleConnection(conn, join, leave, message)
+		go fn.HandleConnection(conn, join, leave, message, existingNames, &namesMu)
 	}
 }

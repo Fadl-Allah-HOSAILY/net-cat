@@ -33,7 +33,15 @@ func Broadcaster(join <-chan *gb.Client, leave <-chan *gb.Client, messages <-cha
 		case m := <-messages:
 			line := FormatMessage(m)
 			AppendHistory(line, history, historyMu, maxHistory)
-			Broadcast(clients, line)
+			var sender *gb.Client
+			for _, cl := range clients {
+				if cl.Name == m.From {
+					sender = cl
+					break
+				}
+			}
+
+			Broadcast(clients, line, sender)
 		}
 	}
 }
