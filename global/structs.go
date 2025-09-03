@@ -9,7 +9,6 @@ import (
 type Client struct {
 	Conn net.Conn
 	Name string
-	Ch   chan string
 }
 
 // Message represents a chat message

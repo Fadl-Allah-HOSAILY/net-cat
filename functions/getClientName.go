@@ -4,10 +4,9 @@ import (
 	"bufio"
 	"net"
 	"strings"
-	"sync"
 )
 
-func GetClientName(conn net.Conn, reader *bufio.Reader, existingNames map[string]bool, mu *sync.Mutex) string {
+func GetClientName(conn net.Conn, reader *bufio.Reader, existingNames map[string]bool) string {
 	for {
 		line, err := reader.ReadString('\n')
 		if err != nil {
