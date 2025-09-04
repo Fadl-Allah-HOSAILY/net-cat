@@ -11,8 +11,7 @@ import (
 var mu sync.Mutex
 
 func HandleConnection(conn net.Conn) {
-	linuxLogo := 
-	`
+	linuxLogo := `
 Welcome to TCP-Chat!
          _nnnn_
         dGGGGMMb
@@ -31,6 +30,7 @@ _)      \.___.,|     .'
 \____   )MMMMMP|   .'
      -'       '
 [ENTER YOUR NAME]: `
+
 	defer conn.Close()
 
 	conn.Write([]byte(linuxLogo))
@@ -38,11 +38,17 @@ _)      \.___.,|     .'
 	reader := bufio.NewReader(conn)
 	name := GetClientName(conn, reader)
 	client := gb.Client{Conn: conn, Name: name}
+	if len(clients) >= 10 {
+		client.Conn.Write([]byte("The chat is full"))
+		return
+	}
+
 	mu.Lock()
+
 	clients[client.Name] = client.Conn
 	mu.Unlock()
 	OpenConnection(client, clients)
-	for _,message:=range history {
+	for _, message := range history {
 		conn.Write([]byte(message))
 	}
 	ClientReader(client)

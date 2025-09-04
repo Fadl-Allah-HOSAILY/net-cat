@@ -27,13 +27,13 @@ func ClientReader(client gb.Client) {
 		if text[0] == "" {
 			continue
 		}
-		if !IsLetter(text[0]){
+		if !IsLetter(text[0]) {
 			client.Conn.Write([]byte("Invalide message \n"))
-			buf=[]byte{}
+			buf = []byte{}
 			continue
 		}
 		writeTime := time.Now().Format("2006-01-02 15:04:05")
-		textFormat := "[" + writeTime + "]" + "[" + client.Name + "]:" + text[0]
+		textFormat := "[" + writeTime + "]" + "[" + client.Name + "]:" + text[0] + "\n"
 		history = append(history, textFormat)
 		for name, clientConn := range clients {
 			format := "[" + writeTime + "]" + "[" + name + "]:"
