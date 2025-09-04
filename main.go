@@ -4,14 +4,13 @@ import (
 	"fmt"
 
 	fn "netCat/functions"
-	"netCat/utils"
 )
 
 const DefaultPort = "8989"
 
 func main() {
-	port := utils.ParsePort(DefaultPort)
-	ln := utils.StartServer(port)
+	port := fn.ParsePort(DefaultPort)
+	ln := fn.StartServer(port)
 	defer ln.Close()
 
 	fmt.Println("Listening on the port:", port)
