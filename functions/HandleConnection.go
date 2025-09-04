@@ -10,32 +10,33 @@ import (
 
 var mu sync.Mutex
 
-func HandleConnection(conn net.Conn, existingNames map[string]bool) {
+func HandleConnection(conn net.Conn) {
 	linuxLogo := 
-	`Welcome to TCP-Chat!
-		 _nnnn_
-		dGGGGMMb
-	   @p~qp~~qMb
-	   M|@||@) M|
-	   @,----.JM|
-	  JS^\__/  qKL
-	 dZP        qKRb
-	dZP          qKKb
-	fZP            SMMb
-	HZM            MMMM
-	FqM            MMMM
-	__| ".        |\dS"qML
-	|    '.       | '' \Zq
-	_)      \.___.,|     .'
-	\____   )MMMMMP|   .'
-	 '-'       '--'
-	[ENTER YOUR NAME]: `
+	`
+Welcome to TCP-Chat!
+         _nnnn_
+        dGGGGMMb
+       @p~qp~~qMb
+       M|@||@) M|
+       @,----.JM|
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    .        ' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMP|   .'
+     -'       '
+[ENTER YOUR NAME]: `
 	defer conn.Close()
 
 	conn.Write([]byte(linuxLogo))
 
 	reader := bufio.NewReader(conn)
-	name := GetClientName(conn, reader, existingNames)
+	name := GetClientName(conn, reader)
 	client := gb.Client{Conn: conn, Name: name}
 	mu.Lock()
 	clients[client.Name] = client.Conn

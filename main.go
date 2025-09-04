@@ -15,14 +15,12 @@ func main() {
 
 	fmt.Println("Listening on the port:", port)
 
-	existingNames := make(map[string]bool)
-
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
 			fmt.Println("accept error:", err)
 			continue
 		}
-		go fn.HandleConnection(conn, existingNames)
+		go fn.HandleConnection(conn)
 	}
 }

@@ -22,18 +22,23 @@ func ClientReader(client gb.Client) {
 			CloseConnection(client, clients)
 			return
 		}
-		text := strings.TrimSpace(string(buf))
+		text := (strings.Split(string(buf), "\n"))
 
-		if text == "" {
+		if text[0] == "" {
+			continue
+		}
+		if !IsLetter(text[0]){
+			client.Conn.Write([]byte("Invalide message \n"))
+			buf=[]byte{}
 			continue
 		}
 		writeTime := time.Now().Format("2006-01-02 15:04:05")
-		textFormat:="[" + writeTime + "]" + "[" + client.Name + "]:"+text
+		textFormat := "[" + writeTime + "]" + "[" + client.Name + "]:" + text[0]
 		history = append(history, textFormat)
 		for name, clientConn := range clients {
-			format := "[" + writeTime + "]" + "[" + name + "]:" 
+			format := "[" + writeTime + "]" + "[" + name + "]:"
 			if name != client.Name {
-				clientConn.Write([]byte("\n"+textFormat))
+				clientConn.Write([]byte("\n" + textFormat))
 				_, err := clientConn.Write([]byte(format))
 				if err != nil {
 					return

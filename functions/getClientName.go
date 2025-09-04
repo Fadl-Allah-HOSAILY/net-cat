@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func GetClientName(conn net.Conn, reader *bufio.Reader, existingNames map[string]bool) string {
+func GetClientName(conn net.Conn, reader *bufio.Reader) string {
 	for {
 		line, err := reader.ReadString('\n')
 		if err != nil {
@@ -18,10 +18,14 @@ func GetClientName(conn net.Conn, reader *bufio.Reader, existingNames map[string
 			conn.Write([]byte("Name cannot be empty. \n[ENTER YOUR NAME]: "))
 			continue
 		}
+		if !IsLetter(name) {
+			conn.Write([]byte("Invalide ame. \n[ENTER YOUR NAME]: "))
+			continue
+		}
 
 		// Vérifier si le nom existe déjà
 		mu.Lock()
-		_, exists := existingNames[name]
+		_, exists := clients[name]
 		mu.Unlock()
 
 		if exists {
